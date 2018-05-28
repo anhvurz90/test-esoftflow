@@ -16,3 +16,4 @@
 	
 # Code improvement if I have more time:
 - Create Java doc for classes & methods.
+- User lombok to avoid getter, setter, toString, hashCode boilerplate code
