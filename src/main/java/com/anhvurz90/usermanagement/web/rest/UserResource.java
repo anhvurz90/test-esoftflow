@@ -1,14 +1,18 @@
 package com.anhvurz90.usermanagement.web.rest;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -95,4 +99,25 @@ public class UserResource {
 		userService.delete(id);
 		return ResponseEntity.ok().build();
 	}
+	
+	@GetMapping("/getFile/{fileName}")
+    public ResponseEntity<byte[]> getFile(@PathVariable String fileName) {
+      log.debug("Rest request to get file: {}", fileName);
+
+      InputStream in = getClass()
+          .getResourceAsStream("/" + fileName);
+      try {
+        return ResponseEntity.ok()
+                             .header("Access-Control-Allow-Headers","Content-Type")
+                             .header("Access-Control-Allow-Methods","GET, POST, OPTIONS")
+                             .header("Access-Control-Allow-Origin","*")
+                             .contentType(MediaType.IMAGE_PNG)
+                             .body(IOUtils.toByteArray(in));
+      } catch (IOException e) {
+        e.printStackTrace();
+        return null;
+      }
+
+  }
+	
 }
